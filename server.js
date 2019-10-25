@@ -1,4 +1,6 @@
+require("dotenv").config();
 var express = require("express");
+var exphbs = require("express-handlebars");
 
 // MONGOOSE DB
 var mongoose = require("mongoose");
@@ -6,10 +8,12 @@ var mongoose = require("mongoose");
 // SCRAPER
 var axios = require("axios");
 var cheerio = require("cheerio");
+
 // MODELS
 var db = require("./models");
+
 // PORT
-var PORT = 8000;
+var PORT = process.env.PORT || 8000;
 var app = express();
 
 // JSON
@@ -17,6 +21,7 @@ app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.json());
+
 // Public Folder
 app.use(express.static("public"));
 
@@ -25,9 +30,24 @@ mongoose.connect("mongodb://localhost/hwScraper", {
     useNewUrlParser: true
 });
 
+// Handlebars
+app.engine(
+    "handlebars",
+    exphbs({
+      defaultLayout: "main"
+    })
+  );
+  app.set("view engine", "handlebars");
+
 // Routes
 var siteOrigin = "https://na.finalfantasyxiv.com";
 var siteURL = "https://na.finalfantasyxiv.com/lodestone/news";
+
+// GET Index
+app.get("/", (req, res) => {
+    res.render("index");
+  });
+
 // GET all Topics from WEBSITE
 app.get("/scrape", function (req, res) {
     axios.get(siteURL).then(function (response) {
