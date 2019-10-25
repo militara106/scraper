@@ -26,18 +26,17 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/hwScraper", {
-    useNewUrlParser: true
-});
+var MONGOD_URI = process.env.MONGOD_URI || "mongodb://localhost/hwScraper";
+mongoose.connect(MONGOD_URI);
 
 // Handlebars
 app.engine(
     "handlebars",
     exphbs({
-      defaultLayout: "main"
+        defaultLayout: "main"
     })
-  );
-  app.set("view engine", "handlebars");
+);
+app.set("view engine", "handlebars");
 
 // Routes
 var siteOrigin = "https://na.finalfantasyxiv.com";
@@ -46,7 +45,7 @@ var siteURL = "https://na.finalfantasyxiv.com/lodestone/news";
 // GET Index
 app.get("/", (req, res) => {
     res.render("index");
-  });
+});
 
 // GET all Topics from WEBSITE
 app.get("/scrape", function (req, res) {
