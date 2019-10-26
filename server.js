@@ -26,7 +26,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-var MONGOD_URI = process.env.MONGOD_URI || "mongodb://localhost/hwScraper";
+var MONGOD_URI = "mongodb://militara:amilitar106@ds339458.mlab.com:39458/heroku_9bqgg6zw" || "mongodb://localhost/hwScraper";
 mongoose.connect(MONGOD_URI);
 
 // Handlebars
