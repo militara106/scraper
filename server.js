@@ -44,7 +44,11 @@ var siteURL = "https://na.finalfantasyxiv.com/lodestone/news";
 
 // GET Index
 app.get("/", (req, res) => {
-    res.render("index");
+    db.Topic.find({}).populate("comment").then(function (dbTopic) {
+        res.render("index", {
+            Topic: dbTopic
+        });
+    });
 });
 
 // GET all Topics from WEBSITE
@@ -73,7 +77,7 @@ app.get("/scrape", function (req, res) {
                 });
         });
         // res.send(siteURL + " scraped.");
-        res.redirect("/topics");
+        res.redirect("/");
     });
 });
 
@@ -102,16 +106,15 @@ app.get("/Topics/:id", function (req, res) {
 // SAVE/UPDATE Comments
 app.post("/Topics/:id", function (req, res) {
     db.Comment.create(req.body).then(function (dbComment) {
-        return db.Topic.findByIdAndUpdate(req.params.id, {
-            $push: {
-                comment: dbComment._id
-            }
+        return db.Topic.findOneAndUpdate({
+            _id: req.params.id
+        }, {
+            comment: dbComment._id
         }, {
             new: true
         });
     }).then(function (dbTopic) {
         console.log(dbTopic);
-        res.json(dbTopic);
     }).catch(function (err) {
         res.json(err);
     });

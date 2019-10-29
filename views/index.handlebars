@@ -1,1 +1,40 @@
-I am index
+<div class="container">
+    <div class="jumbotron ffbox">
+        <h1 class="display-4">FFXIV News Scraper</h1>
+        <p class="lead">Press the scrape button to start</p>
+        <hr class="my-4">
+        <a class="btn btn-primary btn-lg" href="/scrape" role="button">Start Scraping</a>
+    </div>
+
+    {{#each Topic}}
+    <div class="card ffbox" style="width: 100%; margin-bottom: 1rem">
+        <div class="card-body">
+            <h5 class="card-title"><b>{{this.title}}</b></h5>
+            <hr>
+            <p class="card-text">{{this.summary}}</p>
+            <a href={{this.link}} class="card-link">Article Link</a>
+            <hr>
+
+            {{!-- Comments Section --}}
+            {{!-- <h7 class="card-text">Comment</h7>
+            <div>{{this.comment.body}}</div> --}}
+            <div class="card ffbox" style="background: black;">
+                <div class="card-body">
+                    <p class="card-text">{{this.comment.body}}</p>
+                </div>
+            </div>
+
+            {{!-- Submit Comment --}}
+            <form>
+                <div class="form-group">
+                    <br>
+                    <textarea class="form-control" id="commentBody{{this._id}}" rows="2"
+                        placeholder="Write a comment" style="background: black; color:white;"></textarea>
+                    <div class="savenote" data-id="{{this._id}}">Set Comment</div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    {{/each}}
+</div>
